@@ -2,25 +2,47 @@
 #define BASE_H
 
 #include <stdlib.h>
+#include <stdio.h>
 
-struct db_s {
- uint32_t l;
- char* v;
+#define DEL 0
+#define PUT 1
+#define GET 2
+
+#define K_LEN 4
+#define V_LEN 255
+
+struct entry {
+ char k[K_LEN];
+ char v[V_LEN];
+
+ /* acts as a tombstone when op == DEL */
+ uint8_t op;
+} __attribute__((packed));
+
+typedef struct entry entry;
+
+struct db {
+ /* capacity of the memory and disk
+  * in terms of number of entries */
+ size_t mem_cap;
+ size_t disk_cap;
+
+ size_t mem_len;
+ size_t disk_len;
+
+ entry* mem;
+
+ FILE* disk;
+ char* fname;
+
 };
 
-typedef struct db_s db_s;
+typedef struct db db;
 
-char* s_serialize(db_s* s);
+void db_init(db* d);
 
-db_s* s_deserialize(char* buf);
+void db_free(db* d);
 
-void s_free(db_s* s);
-
-struct db_kv {
- db_s k;
- db_s v;
-};
-
-typedef struct db_kv db_kv;
+int db_put(db* d, char* k, char* v);
 
 #endif /* BASE_H */

@@ -2,31 +2,32 @@
 
 #include <stdio.h>
 #include <assert.h>
-#include <string.h>
 
-void test_s_serialize() {
- printf("test: %s ... ", __func__);
+void test_put() {
 
- const char *test_string = "TEST";
+ printf("%s ... ", __func__);
 
- db_s s;
- s.v = strdup(test_string);
- assert(s.v != NULL);
- 
- s.l = strlen(test_string) + 1;
+ db d;
+ d.mem_cap = 1;
+ d.disk_cap = 1;
+ d.fname = "test.db";
 
- char* buf = s_serialize(&s);
- assert(buf != NULL);
+ db_init(&d);
 
- db_s* s2 = s_deserialize(buf);
- assert(s2 != NULL);
+ /* their values do not really matter for 
+  * this test */
+ char key[K_LEN];
+ char value[V_LEN];
+
+ int r = db_put(&d, key, value);
+ assert(r == 0);
+
+ r = db_put(&d, key, value);
+ assert(r == -1);
 
  printf("passed.\n");
 }
 
 int main() {
- test_s_serialize();
+ test_put();
 }
-
-
-
