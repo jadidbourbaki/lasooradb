@@ -45,4 +45,6 @@ void db_free(db* d);
 
 int db_put(db* d, char* k, char* v);
 
+char* db_get(db* d, char* k);
+
 #endif /* BASE_H */

@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include <assert.h>
+#include <string.h>
 
 void test_put() {
 
@@ -25,9 +26,39 @@ void test_put() {
  r = db_put(&d, key, value);
  assert(r == -1);
 
+ db_free(&d);
+
  printf("passed.\n");
 }
 
+void test_get() {
+ printf("%s ... ", __func__);
+
+ db d;
+ d.mem_cap = 2;
+ d.disk_cap = 2;
+ d.fname = "test.db";
+
+ db_init(&d);
+
+ char key[K_LEN] = "K1";
+ char value[V_LEN] = "VALUE";
+
+ int r = db_put(&d, key, value);
+ assert(r == 0);
+
+ char* v = db_get(&d, key);
+
+ assert(strcmp(v, value) == 0);
+ free(v);
+
+ db_free(&d);
+
+ printf("passed.\n");
+}
+
+
 int main() {
  test_put();
+ test_get();
 }

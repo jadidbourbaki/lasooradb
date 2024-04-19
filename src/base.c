@@ -35,3 +35,27 @@ int db_put(db* d, char* k, char* v) {
  return 0;
 }
 
+int key_cmp(char* k1, char* k2) {
+ for (size_t i = 0; i < K_LEN; i++) {
+  if (k1[i] != k2[i]) {
+   return -1;
+  }
+ }
+
+ return 0;
+}
+
+char* db_get(db* d, char* k) {
+ if (d->mem_len == 0) {
+  return NULL;
+ }
+
+ for (size_t i = d->mem_len - 1; i > 0; i--) {
+  if (key_cmp(k, d->mem[i].k) == 0) {
+   return strndup(d->mem[i].v, V_LEN);
+  }
+ }
+
+ return NULL;
+
+}
