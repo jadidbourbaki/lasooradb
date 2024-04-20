@@ -11,6 +11,8 @@
 #define K_LEN 4
 #define V_LEN 255
 
+#define FNAME_LEN 255
+
 #define TEST_START (printf("%s ... ", __func__));
 #define TEST_END (printf("passed.\n"));
 
@@ -24,20 +26,22 @@ struct entry {
 
 typedef struct entry entry;
 
+
 struct db {
  /* capacity of the memory and disk
-  * in terms of number of entries */
+  * in terms of number of entries
+  * and number of files respectively */
  size_t mem_cap;
  size_t disk_cap;
 
+ /* number of entries */
  size_t mem_len;
+ /* number of files */
  size_t disk_len;
 
  entry* mem;
 
- FILE* disk;
  char* fname;
-
 };
 
 typedef struct db db;

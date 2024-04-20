@@ -24,6 +24,9 @@ void test_put() {
 
 
  r = db_put(&d, key, value);
+ assert(r == 0);
+
+ r = db_put(&d, key, value);
  assert(r == -1);
 
  db_free(&d);
@@ -36,8 +39,8 @@ void test_get() {
  TEST_START;
 
  db d;
- d.mem_cap = 2;
- d.disk_cap = 2;
+ d.mem_cap = 1;
+ d.disk_cap = 1;
  d.fname = "test.db";
 
  db_init(&d);
@@ -58,6 +61,16 @@ void test_get() {
  v = db_get(&d, key);
 
  assert(v == NULL);
+
+ r = db_put(&d, key, value);
+ assert(r == 0);
+
+ v = db_get(&d, key);
+ assert(v != NULL);
+
+ sprintf(key, "K1");
+ v = db_get(&d, key);
+ assert(v != NULL);
 
  db_free(&d);
 
