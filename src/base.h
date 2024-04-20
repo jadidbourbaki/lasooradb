@@ -11,6 +11,9 @@
 #define K_LEN 4
 #define V_LEN 255
 
+#define TEST_START (printf("%s ... ", __func__));
+#define TEST_END (printf("passed.\n"));
+
 struct entry {
  char k[K_LEN];
  char v[V_LEN];
@@ -46,5 +49,7 @@ void db_free(db* d);
 int db_put(db* d, char* k, char* v);
 
 char* db_get(db* d, char* k);
+
+int db_del(db* d, char* k);
 
 #endif /* BASE_H */

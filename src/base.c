@@ -4,18 +4,14 @@
 #include <string.h>
 
 void db_init(db* d) {
- size_t entry_len = K_LEN + V_LEN + 1;
-
- d->mem = calloc(d->mem_cap, entry_len);
+ d->mem = calloc(d->mem_cap, sizeof(entry));
  assert(d->mem != NULL);
 
- d->disk = fopen(d->fname, "wb+");
- assert(d->disk != NULL);
+ d->mem_len = 0;
 }
 
 void db_free(db* d) {
  free(d->mem);
- fclose(d->disk);
 }
 
 int db_put(db* d, char* k, char* v) {
@@ -35,6 +31,20 @@ int db_put(db* d, char* k, char* v) {
  return 0;
 }
 
+int db_del(db* d, char* k) {
+ char* v = "";
+ int r = db_put(d, k, v);
+
+ if (r != 0) {
+  return r;
+ }
+
+ entry* e = &d->mem[d->mem_len - 1];
+ e->op = DEL;
+
+ return 0;
+}
+
 int key_cmp(char* k1, char* k2) {
  for (size_t i = 0; i < K_LEN; i++) {
   if (k1[i] != k2[i]) {
@@ -50,8 +60,11 @@ char* db_get(db* d, char* k) {
   return NULL;
  }
 
- for (size_t i = d->mem_len - 1; i > 0; i--) {
+ for (int64_t i = d->mem_len - 1; i >= 0; i--) {
   if (key_cmp(k, d->mem[i].k) == 0) {
+   if (d->mem[i].op == DEL) {
+    return NULL;
+   }
    return strndup(d->mem[i].v, V_LEN);
   }
  }
