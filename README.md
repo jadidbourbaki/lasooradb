@@ -12,3 +12,20 @@ The goal here is to design a very write-optimized
 key value store at the expense of reads.
 
 The implementation is not currently thread-safe.
+
+## Building 
+
+```
+meson setup builddir
+cd builddir
+meson compile
+```
+
+## Testing
+
+```
+meson setup builddir
+cd builddir
+meson test
+```
+
