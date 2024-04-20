@@ -52,6 +52,11 @@ void test_get() {
  assert(strcmp(v, value) == 0);
  free(v);
 
+ sprintf(key, "K2");
+ v = db_get(&d, key);
+
+ assert(v == NULL);
+
  db_free(&d);
 
  printf("passed.\n");
