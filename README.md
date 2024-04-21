@@ -26,6 +26,6 @@ meson compile
 ```
 meson setup builddir
 cd builddir
-meson test
+meson test -v
 ```
 

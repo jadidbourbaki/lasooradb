@@ -11,4 +11,11 @@ int save_mem(db* d);
  */
 int load_mem(db* d);
 
+/* Checks what disk length to set */
+void infer_disk(db* d);
+
+/* Checks if a memory buffer is saved
+ * and if so loads it */
+void infer_mem(db* d);
+
 #endif /* PERSIST_H */

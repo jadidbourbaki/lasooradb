@@ -1,6 +1,8 @@
 #include "persist.h"
 
 #include <assert.h>
+#include <stdio.h>
+#include <unistd.h>
 
 int save_mem(db* d) {
   char fname[FNAME_LEN];
@@ -38,4 +40,30 @@ int load_mem(db* d) {
   fclose(f);
 
   return 0;
+}
+
+void infer_disk(db* d) {
+ size_t i = 0;
+ char fname[FNAME_LEN];
+
+ sprintf(fname, "%s.%zu", d->fname, i);
+
+ while (access(fname, F_OK) == 0) {
+  i++;
+  sprintf(fname, "%s.%zu", d->fname, i);
+ }
+
+ d->disk_len = i;
+}
+
+void infer_mem(db* d) {
+ char fname[FNAME_LEN];
+ sprintf(fname, "%s.mem", d->fname);
+
+ if (access(fname, F_OK) == 0) {
+  load_mem(d);
+  return;
+ }
+
+ d->mem_len = 0;
 }

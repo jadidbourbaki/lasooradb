@@ -9,7 +9,7 @@
 #define GET 2
 
 #define K_LEN 4
-#define V_LEN 255
+#define V_LEN 252
 
 #define FNAME_LEN 255
 
@@ -55,5 +55,7 @@ int db_put(db* d, char* k, char* v);
 char* db_get(db* d, char* k);
 
 int db_del(db* d, char* k);
+
+int db_clear(db* d);
 
 #endif /* BASE_H */

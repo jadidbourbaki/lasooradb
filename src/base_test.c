@@ -10,7 +10,7 @@ void test_put() {
  db d;
  d.mem_cap = 1;
  d.disk_cap = 1;
- d.fname = "test.db";
+ d.fname = "put.db";
 
  db_init(&d);
 
@@ -29,6 +29,7 @@ void test_put() {
  r = db_put(&d, key, value);
  assert(r == -1);
 
+ db_clear(&d);
  db_free(&d);
 
  TEST_END;
@@ -41,7 +42,7 @@ void test_get() {
  db d;
  d.mem_cap = 1;
  d.disk_cap = 1;
- d.fname = "test.db";
+ d.fname = "get.db";
 
  db_init(&d);
 
@@ -62,6 +63,7 @@ void test_get() {
 
  assert(v == NULL);
 
+
  r = db_put(&d, key, value);
  assert(r == 0);
 
@@ -72,6 +74,7 @@ void test_get() {
  v = db_get(&d, key);
  assert(v != NULL);
 
+ db_clear(&d);
  db_free(&d);
 
  TEST_END;
@@ -83,7 +86,7 @@ void test_del() {
  db d;
  d.mem_cap = 2;
  d.disk_cap = 2;
- d.fname = "test.db";
+ d.fname = "del.db";
 
  db_init(&d);
 
@@ -104,6 +107,7 @@ void test_del() {
  v = db_get(&d, key);
  assert(v == NULL);
 
+ db_clear(&d);
  db_free(&d);
 
  TEST_END;

@@ -1,14 +1,17 @@
 #include "base.h"
+#include "persist.h"
 
 #include <assert.h>
 #include <string.h>
+#include <unistd.h>
 
 void db_init(db* d) {
  d->mem = calloc(d->mem_cap, sizeof(entry));
  assert(d->mem != NULL);
 
- d->mem_len = 0;
- d->disk_len = 0;
+
+ infer_mem(d);
+ infer_disk(d);
 }
 
 void db_free(db* d) {
@@ -111,4 +114,29 @@ char* db_get(db* d, char* k) {
 
  return NULL;
 
+}
+
+int db_clear(db* d) {
+ char fname[FNAME_LEN];
+ sprintf(fname, "%s.mem", d->fname);
+
+ int r;
+
+ if (access(fname, F_OK) == 0) {
+  r = remove(fname);
+  if (r != 0) {
+   return -1;
+  }
+ }
+
+ size_t i;
+ for (i = 0; i < d->disk_len; i++) {
+  sprintf(fname, "%s.%zu", d->fname, i);
+  r = remove(fname);
+  if (r != 0) {
+   return -1;
+  }
+ }
+ 
+ return 0;
 }
