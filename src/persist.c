@@ -28,6 +28,9 @@ int load_mem(db* d) {
   }
 
   fread(&d->mem_len, sizeof(size_t), 1, f);
+  if (d->mem_len > d->mem_cap) {
+   return -1;
+  }
 
   size_t bytes_to_read = sizeof(entry) * d->mem_len;
   fread(d->mem, bytes_to_read, 1, f);
